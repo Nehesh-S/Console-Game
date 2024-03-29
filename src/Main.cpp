@@ -2,10 +2,12 @@
 
 int main(int argc, char* argv[]) {
     
-    int _screenWidth = 1024;
-    int _screenHeight = 600;
+    int screenWidth = 1024;
+    int screenHeight = 600;
     
-    Game game("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _screenWidth, _screenHeight, SDL_WINDOW_SHOWN);
+    Game game("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, SDL_WINDOW_SHOWN);
+
+    SDL_Texture* frog = game.loadTexture("res/gfx/building_small.jpg");
 
     while (game.gameState != GameState::EXIT) {
         SDL_Event event;
@@ -16,6 +18,9 @@ int main(int argc, char* argv[]) {
             game.gameState = GameState::EXIT;
             break;
         }
+
+        game.render(frog);
+        game.run();
     }
 
     return 0;
