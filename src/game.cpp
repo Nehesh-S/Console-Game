@@ -6,25 +6,4 @@ Game::Game(const char* title, int x, int y, int w, int h, Uint32 flags) {
     _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
 };
 
-Game::~Game() {};
 
-void Game::run() {
-    gameLoop();
-}
-
-void Game::gameLoop() {
-    while (_gameState != GameState::EXIT) {
-        handleEvents();
-    }
-}
-
-void Game::handleEvents() {
-    SDL_Event evnt;
-    SDL_PollEvent(&evnt);
-
-    switch (evnt.type) {
-    case SDL_QUIT:
-        _gameState = GameState::EXIT;
-        break;
-    }
-}
