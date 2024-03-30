@@ -9,6 +9,8 @@ const int CHARACTER_HEIGHT = 32;
 const int MOVE_DELAY_MS = 100; // Delay in milliseconds for each movement
 const int SCROLL_LIMIT_X = 64; // The limit for sprite movement before background scrolling starts (in pixels)
 const int SCROLL_LIMIT_Y = 64;
+const int STARTING_BACKGROUND_X = -408; // Specify the starting position of the background in X coordinate
+const int STARTING_BACKGROUND_Y = -872; // Specify the starting position of the background in Y coordinate
 
 int main(int argc, char* argv[]) {
     SDL_Init(SDL_INIT_VIDEO);
@@ -37,9 +39,9 @@ int main(int argc, char* argv[]) {
     int backgroundWidth, backgroundHeight;
     SDL_QueryTexture(backgroundTexture, NULL, NULL, &backgroundWidth, &backgroundHeight);
 
-    // Position the background to allow overflow
-    SDL_Rect backgroundRect = { -(backgroundWidth - WINDOW_WIDTH) / 2, -(backgroundHeight - WINDOW_HEIGHT) / 2, backgroundWidth, backgroundHeight }; // Background position and size
-    SDL_Rect characterRect = { 16*9, 16*8, CHARACTER_WIDTH, CHARACTER_HEIGHT }; // Initial position and size of the character sprite
+    // Position the background at the specified starting position
+    SDL_Rect backgroundRect = { STARTING_BACKGROUND_X, STARTING_BACKGROUND_Y, backgroundWidth, backgroundHeight }; // Background position and size
+    SDL_Rect characterRect = { (WINDOW_WIDTH - CHARACTER_WIDTH) / 2, (WINDOW_HEIGHT - CHARACTER_HEIGHT) / 2, CHARACTER_WIDTH, CHARACTER_HEIGHT }; // Initial position and size of the character sprite
 
     bool quit = false;
     while (!quit) {
