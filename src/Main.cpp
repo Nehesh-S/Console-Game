@@ -7,6 +7,8 @@ const int WINDOW_HEIGHT = 240;
 const int CHARACTER_WIDTH = 16;
 const int CHARACTER_HEIGHT = 32;
 const int MOVE_DELAY_MS = 100; // Delay in milliseconds for each movement
+const int SCROLL_LIMIT_X = 64; // The limit for sprite movement before background scrolling starts (in pixels)
+const int SCROLL_LIMIT_Y = 64;
 
 int main(int argc, char* argv[]) {
     SDL_Init(SDL_INIT_VIDEO);
@@ -51,36 +53,52 @@ int main(int argc, char* argv[]) {
         const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
         if (currentKeyStates[SDL_SCANCODE_LEFT]) {
             if (characterRect.x > 0 || backgroundRect.x < 0) {
-                characterRect.x -= 16; // Move character left
-                if (characterRect.x < 0) {
-                    backgroundRect.x += 16; // Move background right to simulate larger map
+                if (characterRect.x > SCROLL_LIMIT_X || backgroundRect.x >= 0) {
+                    characterRect.x -= 16; // Move character left
+                }
+                else {
+                    if (backgroundRect.x < 0) {
+                        backgroundRect.x += 16; // Move background right to simulate larger map
+                    }
                 }
                 SDL_Delay(MOVE_DELAY_MS);
             }
         }
         if (currentKeyStates[SDL_SCANCODE_RIGHT]) {
             if (characterRect.x < WINDOW_WIDTH - CHARACTER_WIDTH || backgroundRect.x + backgroundRect.w > WINDOW_WIDTH) {
-                characterRect.x += 16; // Move character right
-                if (characterRect.x + CHARACTER_WIDTH > WINDOW_WIDTH) {
-                    backgroundRect.x -= 16; // Move background left to simulate larger map
+                if (characterRect.x < WINDOW_WIDTH - CHARACTER_WIDTH - SCROLL_LIMIT_X || backgroundRect.x + backgroundRect.w <= WINDOW_WIDTH) {
+                    characterRect.x += 16; // Move character right
+                }
+                else {
+                    if (backgroundRect.x + backgroundRect.w > WINDOW_WIDTH) {
+                        backgroundRect.x -= 16; // Move background left to simulate larger map
+                    }
                 }
                 SDL_Delay(MOVE_DELAY_MS);
             }
         }
         if (currentKeyStates[SDL_SCANCODE_UP]) {
             if (characterRect.y > 0 || backgroundRect.y < 0) {
-                characterRect.y -= 16; // Move character up
-                if (characterRect.y < 0) {
-                    backgroundRect.y += 16; // Move background down to simulate larger map
+                if (characterRect.y > SCROLL_LIMIT_Y || backgroundRect.y >= 0) {
+                    characterRect.y -= 16; // Move character up
+                }
+                else {
+                    if (backgroundRect.y < 0) {
+                        backgroundRect.y += 16; // Move background down to simulate larger map
+                    }
                 }
                 SDL_Delay(MOVE_DELAY_MS);
             }
         }
         if (currentKeyStates[SDL_SCANCODE_DOWN]) {
             if (characterRect.y < WINDOW_HEIGHT - CHARACTER_HEIGHT || backgroundRect.y + backgroundRect.h > WINDOW_HEIGHT) {
-                characterRect.y += 16; // Move character down
-                if (characterRect.y + CHARACTER_HEIGHT > WINDOW_HEIGHT) {
-                    backgroundRect.y -= 16; // Move background up to simulate larger map
+                if (characterRect.y < WINDOW_HEIGHT - CHARACTER_HEIGHT - SCROLL_LIMIT_Y || backgroundRect.y + backgroundRect.h <= WINDOW_HEIGHT) {
+                    characterRect.y += 16; // Move character down
+                }
+                else {
+                    if (backgroundRect.y + backgroundRect.h > WINDOW_HEIGHT) {
+                        backgroundRect.y -= 16; // Move background up to simulate larger map
+                    }
                 }
                 SDL_Delay(MOVE_DELAY_MS);
             }
