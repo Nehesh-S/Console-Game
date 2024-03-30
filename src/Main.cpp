@@ -13,6 +13,15 @@ int main(int argc, char* argv[]) {
     SDL_Window* window = SDL_CreateWindow("Simple Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
+    // Load background image
+    SDL_Surface* backgroundSurface = IMG_Load("res/background/forest.png");
+    if (!backgroundSurface) {
+        std::cerr << "Failed to load background image: " << SDL_GetError() << std::endl;
+        return 1;
+    }
+    SDL_Texture* backgroundTexture = SDL_CreateTextureFromSurface(renderer, backgroundSurface);
+    SDL_FreeSurface(backgroundSurface);
+
     // Load character sprite image
     SDL_Surface* characterSurface = IMG_Load("res/player/normal_up.png");
     if (!characterSurface) {
@@ -22,6 +31,7 @@ int main(int argc, char* argv[]) {
     SDL_Texture* characterTexture = SDL_CreateTextureFromSurface(renderer, characterSurface);
     SDL_FreeSurface(characterSurface);
 
+    SDL_Rect backgroundRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT }; // Background position and size
     SDL_Rect characterRect = { 0, 0, CHARACTER_WIDTH, CHARACTER_HEIGHT }; // Initial position and size of the character sprite
 
     bool quit = false;
@@ -61,10 +71,12 @@ int main(int argc, char* argv[]) {
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Clear screen
         SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer, backgroundTexture, NULL, &backgroundRect); // Render background
         SDL_RenderCopy(renderer, characterTexture, NULL, &characterRect); // Render character
         SDL_RenderPresent(renderer); // Present renderer
     }
 
+    SDL_DestroyTexture(backgroundTexture);
     SDL_DestroyTexture(characterTexture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
