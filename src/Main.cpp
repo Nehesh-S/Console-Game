@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
 
     // Position the background to allow overflow
     SDL_Rect backgroundRect = { -(backgroundWidth - WINDOW_WIDTH) / 2, -(backgroundHeight - WINDOW_HEIGHT) / 2, backgroundWidth, backgroundHeight }; // Background position and size
-    SDL_Rect characterRect = { 0, 0, CHARACTER_WIDTH, CHARACTER_HEIGHT }; // Initial position and size of the character sprite
+    SDL_Rect characterRect = { 16*9, 16*8, CHARACTER_WIDTH, CHARACTER_HEIGHT }; // Initial position and size of the character sprite
 
     bool quit = false;
     while (!quit) {
