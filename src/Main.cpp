@@ -31,7 +31,12 @@ int main(int argc, char* argv[]) {
     SDL_Texture* characterTexture = SDL_CreateTextureFromSurface(renderer, characterSurface);
     SDL_FreeSurface(characterSurface);
 
-    SDL_Rect backgroundRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT }; // Background position and size
+    // Get the dimensions of the background image
+    int backgroundWidth, backgroundHeight;
+    SDL_QueryTexture(backgroundTexture, NULL, NULL, &backgroundWidth, &backgroundHeight);
+
+    // Position the background to allow overflow
+    SDL_Rect backgroundRect = { -(backgroundWidth - WINDOW_WIDTH) / 2, -(backgroundHeight - WINDOW_HEIGHT) / 2, backgroundWidth, backgroundHeight }; // Background position and size
     SDL_Rect characterRect = { 0, 0, CHARACTER_WIDTH, CHARACTER_HEIGHT }; // Initial position and size of the character sprite
 
     bool quit = false;
@@ -45,26 +50,38 @@ int main(int argc, char* argv[]) {
 
         const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
         if (currentKeyStates[SDL_SCANCODE_LEFT]) {
-            if (characterRect.x > 0) {
+            if (characterRect.x > 0 || backgroundRect.x < 0) {
                 characterRect.x -= 16; // Move character left
+                if (characterRect.x < 0) {
+                    backgroundRect.x += 16; // Move background right to simulate larger map
+                }
                 SDL_Delay(MOVE_DELAY_MS);
             }
         }
         if (currentKeyStates[SDL_SCANCODE_RIGHT]) {
-            if (characterRect.x < WINDOW_WIDTH - CHARACTER_WIDTH) {
+            if (characterRect.x < WINDOW_WIDTH - CHARACTER_WIDTH || backgroundRect.x + backgroundRect.w > WINDOW_WIDTH) {
                 characterRect.x += 16; // Move character right
+                if (characterRect.x + CHARACTER_WIDTH > WINDOW_WIDTH) {
+                    backgroundRect.x -= 16; // Move background left to simulate larger map
+                }
                 SDL_Delay(MOVE_DELAY_MS);
             }
         }
         if (currentKeyStates[SDL_SCANCODE_UP]) {
-            if (characterRect.y > 0) {
+            if (characterRect.y > 0 || backgroundRect.y < 0) {
                 characterRect.y -= 16; // Move character up
+                if (characterRect.y < 0) {
+                    backgroundRect.y += 16; // Move background down to simulate larger map
+                }
                 SDL_Delay(MOVE_DELAY_MS);
             }
         }
         if (currentKeyStates[SDL_SCANCODE_DOWN]) {
-            if (characterRect.y < WINDOW_HEIGHT - CHARACTER_HEIGHT) {
+            if (characterRect.y < WINDOW_HEIGHT - CHARACTER_HEIGHT || backgroundRect.y + backgroundRect.h > WINDOW_HEIGHT) {
                 characterRect.y += 16; // Move character down
+                if (characterRect.y + CHARACTER_HEIGHT > WINDOW_HEIGHT) {
+                    backgroundRect.y -= 16; // Move background up to simulate larger map
+                }
                 SDL_Delay(MOVE_DELAY_MS);
             }
         }
