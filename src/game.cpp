@@ -6,7 +6,7 @@ Game::Game() {
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     loadTextures();
     backgroundRect = { STARTING_BACKGROUND_X, STARTING_BACKGROUND_Y, backgroundWidth, backgroundHeight }; // Set the background size to the loaded image size
-    characterRect = { (WINDOW_WIDTH - CHARACTER_WIDTH) / 2, (WINDOW_HEIGHT - CHARACTER_HEIGHT) / 2, CHARACTER_WIDTH, CHARACTER_HEIGHT };
+    characterRect = { CHARACTER_START_X, CHARACTER_START_Y, CHARACTER_WIDTH, CHARACTER_HEIGHT };
 }
 
 Game::~Game() {
