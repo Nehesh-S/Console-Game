@@ -135,9 +135,3 @@ bool Game::isCharacterInBoundingBox(int x, int y) {
     }
     return false; // Character is not in any bounding box
 }
-
-void Game::addBoundingBoxes() {
-    BoundingBox bb1 = { STARTING_BACKGROUND_X + 0, STARTING_BACKGROUND_Y + 0, 144, 1104 };
-    // topleft x, topleft y, width, height
-    boundingBoxes.push_back(bb1);
-}
