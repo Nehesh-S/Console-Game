@@ -3,17 +3,17 @@
 #include <iostream>
 #include <vector>
 
-const int WINDOW_WIDTH = 320;
-const int WINDOW_HEIGHT = 240;
-const int CHARACTER_WIDTH = 16;
-const int CHARACTER_HEIGHT = 32;
+const int WINDOW_WIDTH = 640;
+const int WINDOW_HEIGHT = 480;
+const int CHARACTER_WIDTH = 32;
+const int CHARACTER_HEIGHT = 64;
 const int MOVE_DELAY_MS = 100;
-const int SCROLL_LIMIT_X = 64;
-const int SCROLL_LIMIT_Y = 64;
-const int STARTING_BACKGROUND_X = -400;
-const int STARTING_BACKGROUND_Y = -848;
-const int CHARACTER_START_X = 160;
-const int CHARACTER_START_Y = 128;
+const int SCROLL_LIMIT_X = 128;
+const int SCROLL_LIMIT_Y = 128;
+const int STARTING_BACKGROUND_X = -800;
+const int STARTING_BACKGROUND_Y = -1696;
+const int CHARACTER_START_X = 320;
+const int CHARACTER_START_Y = 256;
 
 struct BoundingBox {
     int x, y, w, h;

@@ -33,14 +33,14 @@ void Game::run() {
         if (currentKeyStates[SDL_SCANCODE_LEFT] && !isCharacterInBoundingBox(characterRect.x - 16, characterRect.y)) {
             if (characterRect.x > 0 || backgroundRect.x < 0) {
                 if (characterRect.x > SCROLL_LIMIT_X || backgroundRect.x >= 0) {
-                    characterRect.x -= 16; // Move character left
+                    characterRect.x -= 32; // Move character left
                 }
                 else {
                     if (backgroundRect.x < 0) {
-                        backgroundRect.x += 16; // Move background right to simulate larger map
+                        backgroundRect.x += 32; // Move background right to simulate larger map
                     }
                     for (auto& bb : boundingBoxes) {
-                        bb.x += 16;
+                        bb.x += 32;
                     }
                 }
                 SDL_Delay(MOVE_DELAY_MS);
@@ -49,46 +49,46 @@ void Game::run() {
         if (currentKeyStates[SDL_SCANCODE_RIGHT] && !isCharacterInBoundingBox(characterRect.x + 16, characterRect.y)) {
             if (characterRect.x < WINDOW_WIDTH - CHARACTER_WIDTH || backgroundRect.x + backgroundRect.w > WINDOW_WIDTH) {
                 if (characterRect.x < WINDOW_WIDTH - CHARACTER_WIDTH - SCROLL_LIMIT_X || backgroundRect.x + backgroundRect.w <= WINDOW_WIDTH) {
-                    characterRect.x += 16; // Move character right
+                    characterRect.x += 32; // Move character right
                 }
                 else {
                     if (backgroundRect.x + backgroundRect.w > WINDOW_WIDTH) {
-                        backgroundRect.x -= 16; // Move background left to simulate larger map
+                        backgroundRect.x -= 32; // Move background left to simulate larger map
                     }
                     for (auto& bb : boundingBoxes) {
-                        bb.x -= 16;
+                        bb.x -= 32;
                     }
                 }
                 SDL_Delay(MOVE_DELAY_MS);
             }
         }
-        if (currentKeyStates[SDL_SCANCODE_UP] && !isCharacterInBoundingBox(characterRect.x, characterRect.y - 16)) {
+        if (currentKeyStates[SDL_SCANCODE_UP] && !isCharacterInBoundingBox(characterRect.x, characterRect.y - 32)) {
             if (characterRect.y > 0 || backgroundRect.y < 0) {
                 if (characterRect.y > SCROLL_LIMIT_Y || backgroundRect.y >= 0) {
-                    characterRect.y -= 16; // Move character up
+                    characterRect.y -= 32; // Move character up
                 }
                 else {
                     if (backgroundRect.y < 0) {
-                        backgroundRect.y += 16; // Move background down to simulate larger map
+                        backgroundRect.y += 32; // Move background down to simulate larger map
                     }
                     for (auto& bb : boundingBoxes) {
-                        bb.y += 16;
+                        bb.y += 32;
                     }
                 }
                 SDL_Delay(MOVE_DELAY_MS);
             }
         }
-        if (currentKeyStates[SDL_SCANCODE_DOWN] && !isCharacterInBoundingBox(characterRect.x, characterRect.y + 16)) {
+        if (currentKeyStates[SDL_SCANCODE_DOWN] && !isCharacterInBoundingBox(characterRect.x, characterRect.y + 32)) {
             if (characterRect.y < WINDOW_HEIGHT - CHARACTER_HEIGHT || backgroundRect.y + backgroundRect.h > WINDOW_HEIGHT) {
                 if (characterRect.y < WINDOW_HEIGHT - CHARACTER_HEIGHT - SCROLL_LIMIT_Y || backgroundRect.y + backgroundRect.h <= WINDOW_HEIGHT) {
-                    characterRect.y += 16; // Move character down
+                    characterRect.y += 32; // Move character down
                 }
                 else {
                     if (backgroundRect.y + backgroundRect.h > WINDOW_HEIGHT) {
-                        backgroundRect.y -= 16; // Move background up to simulate larger map
+                        backgroundRect.y -= 32; // Move background up to simulate larger map
                     }
                     for (auto& bb : boundingBoxes) {
-                        bb.y -= 16;
+                        bb.y -= 32;
                     }
                 }
                 SDL_Delay(MOVE_DELAY_MS);
@@ -105,7 +105,7 @@ void Game::run() {
 
 void Game::loadTextures() {
     // Load background image
-    SDL_Surface* backgroundSurface = IMG_Load("res/background/forest.png");
+    SDL_Surface* backgroundSurface = IMG_Load("res/background/forest_L.png");
     if (!backgroundSurface) {
         std::cerr << "Failed to load background image: " << SDL_GetError() << std::endl;
         exit(1);
