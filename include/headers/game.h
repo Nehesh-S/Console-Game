@@ -16,7 +16,9 @@ const int CHARACTER_START_X = 320;
 const int CHARACTER_START_Y = 256;
 
 const int TREE_WIDTH = 96;
-const int TREE_HEIGHT = 128;
+const int TREE_HEIGHT = 64;
+const int GRASS_WIDTH = 32;
+const int GRASS_HEIGHT = 32;
 const int MAP_WIDTH = 2112;
 const int MAP_HEIGHT = 2208;
 
