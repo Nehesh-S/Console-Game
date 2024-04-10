@@ -15,6 +15,11 @@ const int STARTING_BACKGROUND_Y = -1696;
 const int CHARACTER_START_X = 320;
 const int CHARACTER_START_Y = 256;
 
+const int TREE_WIDTH = 96;
+const int TREE_HEIGHT = 128;
+const int MAP_WIDTH = 2112;
+const int MAP_HEIGHT = 2208;
+
 struct BoundingBox {
     int x, y, w, h;
 };
