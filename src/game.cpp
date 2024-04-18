@@ -2,9 +2,11 @@
 
 Game::Game() {
     SDL_Init(SDL_INIT_VIDEO);
-    window = SDL_CreateWindow("Simple Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("Console Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     loadTextures();
+    spriteup();
+    up = true;
     backgroundRect = { STARTING_BACKGROUND_X, STARTING_BACKGROUND_Y, backgroundWidth, backgroundHeight }; // Set the background size to the loaded image size
     characterRect = { CHARACTER_START_X, CHARACTER_START_Y, CHARACTER_WIDTH, CHARACTER_HEIGHT };
 
@@ -31,67 +33,95 @@ void Game::run() {
 
         const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
         if (currentKeyStates[SDL_SCANCODE_LEFT] && !isCharacterInBoundingBox(characterRect.x - 16, characterRect.y)) {
-            if (characterRect.x > 0 || backgroundRect.x < 0) {
-                if (characterRect.x > SCROLL_LIMIT_X || backgroundRect.x >= 0) {
-                    characterRect.x -= 32; // Move character left
-                }
-                else {
-                    if (backgroundRect.x < 0) {
-                        backgroundRect.x += 32; // Move background right to simulate larger map
+            if (left) {
+                if (characterRect.x > 0 || backgroundRect.x < 0) {
+                    if (characterRect.x > SCROLL_LIMIT_X || backgroundRect.x >= 0) {
+                        characterRect.x -= 32; // Move character left
                     }
-                    for (auto& bb : boundingBoxes) {
-                        bb.x += 32;
+                    else {
+                        if (backgroundRect.x < 0) {
+                            backgroundRect.x += 32; // Move background right to simulate larger map
+                        }
+                        for (auto& bb : boundingBoxes) {
+                            bb.x += 32;
+                        }
                     }
+                    SDL_Delay(MOVE_DELAY_MS);
                 }
-                SDL_Delay(MOVE_DELAY_MS);
+            }
+            else {
+                left = true;
+                up = down = right = false;
+                spriteleft();
             }
         }
         if (currentKeyStates[SDL_SCANCODE_RIGHT] && !isCharacterInBoundingBox(characterRect.x + 16, characterRect.y)) {
-            if (characterRect.x < WINDOW_WIDTH - CHARACTER_WIDTH || backgroundRect.x + backgroundRect.w > WINDOW_WIDTH) {
-                if (characterRect.x < WINDOW_WIDTH - CHARACTER_WIDTH - SCROLL_LIMIT_X || backgroundRect.x + backgroundRect.w <= WINDOW_WIDTH) {
-                    characterRect.x += 32; // Move character right
-                }
-                else {
-                    if (backgroundRect.x + backgroundRect.w > WINDOW_WIDTH) {
-                        backgroundRect.x -= 32; // Move background left to simulate larger map
+            if (right) {
+                if (characterRect.x < WINDOW_WIDTH - CHARACTER_WIDTH || backgroundRect.x + backgroundRect.w > WINDOW_WIDTH) {
+                    if (characterRect.x < WINDOW_WIDTH - CHARACTER_WIDTH - SCROLL_LIMIT_X || backgroundRect.x + backgroundRect.w <= WINDOW_WIDTH) {
+                        characterRect.x += 32; // Move character right
                     }
-                    for (auto& bb : boundingBoxes) {
-                        bb.x -= 32;
+                    else {
+                        if (backgroundRect.x + backgroundRect.w > WINDOW_WIDTH) {
+                            backgroundRect.x -= 32; // Move background left to simulate larger map
+                        }
+                        for (auto& bb : boundingBoxes) {
+                            bb.x -= 32;
+                        }
                     }
+                    SDL_Delay(MOVE_DELAY_MS);
                 }
-                SDL_Delay(MOVE_DELAY_MS);
+            }
+            else {
+                right = true;
+                up = down = left = false;
+                spriteright();
             }
         }
         if (currentKeyStates[SDL_SCANCODE_UP] && !isCharacterInBoundingBox(characterRect.x, characterRect.y - 32)) {
-            if (characterRect.y > 0 || backgroundRect.y < 0) {
-                if (characterRect.y > SCROLL_LIMIT_Y || backgroundRect.y >= 0) {
-                    characterRect.y -= 32; // Move character up
-                }
-                else {
-                    if (backgroundRect.y < 0) {
-                        backgroundRect.y += 32; // Move background down to simulate larger map
+            if (up) {
+                if (characterRect.y > 0 || backgroundRect.y < 0) {
+                    if (characterRect.y > SCROLL_LIMIT_Y || backgroundRect.y >= 0) {
+                        characterRect.y -= 32; // Move character up
                     }
-                    for (auto& bb : boundingBoxes) {
-                        bb.y += 32;
+                    else {
+                        if (backgroundRect.y < 0) {
+                            backgroundRect.y += 32; // Move background down to simulate larger map
+                        }
+                        for (auto& bb : boundingBoxes) {
+                            bb.y += 32;
+                        }
                     }
+                    SDL_Delay(MOVE_DELAY_MS);
                 }
-                SDL_Delay(MOVE_DELAY_MS);
+            }
+            else {
+                up = true;
+                left = down = right = false;
+                spriteup();
             }
         }
         if (currentKeyStates[SDL_SCANCODE_DOWN] && !isCharacterInBoundingBox(characterRect.x, characterRect.y + 32)) {
-            if (characterRect.y < WINDOW_HEIGHT - CHARACTER_HEIGHT || backgroundRect.y + backgroundRect.h > WINDOW_HEIGHT) {
-                if (characterRect.y < WINDOW_HEIGHT - CHARACTER_HEIGHT - SCROLL_LIMIT_Y || backgroundRect.y + backgroundRect.h <= WINDOW_HEIGHT) {
-                    characterRect.y += 32; // Move character down
-                }
-                else {
-                    if (backgroundRect.y + backgroundRect.h > WINDOW_HEIGHT) {
-                        backgroundRect.y -= 32; // Move background up to simulate larger map
+            if (down) {
+                if (characterRect.y < WINDOW_HEIGHT - CHARACTER_HEIGHT || backgroundRect.y + backgroundRect.h > WINDOW_HEIGHT) {
+                    if (characterRect.y < WINDOW_HEIGHT - CHARACTER_HEIGHT - SCROLL_LIMIT_Y || backgroundRect.y + backgroundRect.h <= WINDOW_HEIGHT) {
+                        characterRect.y += 32; // Move character down
                     }
-                    for (auto& bb : boundingBoxes) {
-                        bb.y -= 32;
+                    else {
+                        if (backgroundRect.y + backgroundRect.h > WINDOW_HEIGHT) {
+                            backgroundRect.y -= 32; // Move background up to simulate larger map
+                        }
+                        for (auto& bb : boundingBoxes) {
+                            bb.y -= 32;
+                        }
                     }
+                    SDL_Delay(MOVE_DELAY_MS);
                 }
-                SDL_Delay(MOVE_DELAY_MS);
+            }
+            else {
+                down = true;
+                up = left = right = false;
+                spritedown();
             }
         }
 
@@ -113,6 +143,11 @@ void Game::loadTextures() {
     backgroundTexture = SDL_CreateTextureFromSurface(renderer, backgroundSurface);
     SDL_FreeSurface(backgroundSurface);
 
+    // Get the dimensions of the background image
+    SDL_QueryTexture(backgroundTexture, NULL, NULL, &backgroundWidth, &backgroundHeight);
+}
+
+void Game::spriteup() {
     // Load character sprite image
     SDL_Surface* characterSurface = IMG_Load("res/player/normal_up.png");
     if (!characterSurface) {
@@ -121,9 +156,39 @@ void Game::loadTextures() {
     }
     characterTexture = SDL_CreateTextureFromSurface(renderer, characterSurface);
     SDL_FreeSurface(characterSurface);
+}
 
-    // Get the dimensions of the background image
-    SDL_QueryTexture(backgroundTexture, NULL, NULL, &backgroundWidth, &backgroundHeight);
+void Game::spritedown() {
+    // Load character sprite image
+    SDL_Surface* characterSurface = IMG_Load("res/player/normal_down.png");
+    if (!characterSurface) {
+        std::cerr << "Failed to load character sprite image: " << SDL_GetError() << std::endl;
+        exit(1);
+    }
+    characterTexture = SDL_CreateTextureFromSurface(renderer, characterSurface);
+    SDL_FreeSurface(characterSurface);
+}
+
+void Game::spriteleft() {
+    // Load character sprite image
+    SDL_Surface* characterSurface = IMG_Load("res/player/normal_left.png");
+    if (!characterSurface) {
+        std::cerr << "Failed to load character sprite image: " << SDL_GetError() << std::endl;
+        exit(1);
+    }
+    characterTexture = SDL_CreateTextureFromSurface(renderer, characterSurface);
+    SDL_FreeSurface(characterSurface);
+}
+
+void Game::spriteright() {
+    // Load character sprite image
+    SDL_Surface* characterSurface = IMG_Load("res/player/normal_right.png");
+    if (!characterSurface) {
+        std::cerr << "Failed to load character sprite image: " << SDL_GetError() << std::endl;
+        exit(1);
+    }
+    characterTexture = SDL_CreateTextureFromSurface(renderer, characterSurface);
+    SDL_FreeSurface(characterSurface);
 }
 
 bool Game::isCharacterInBoundingBox(int x, int y) {

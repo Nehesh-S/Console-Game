@@ -38,9 +38,18 @@ class Game {
         int backgroundHeight;
         std::vector<BoundingBox> boundingBoxes;
 
+        bool left = false;
+        bool right = false;
+        bool down = false;
+        bool up = false;
+
         void loadTextures();
         void addBoundingBoxes();
         bool isCharacterInBoundingBox(int x, int y);
+        void spriteup();
+        void spritedown();
+        void spriteleft();
+        void spriteright();
         
     public:
         Game();
