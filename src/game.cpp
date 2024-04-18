@@ -46,7 +46,6 @@ void Game::run() {
                             bb.x += 32;
                         }
                     }
-                    SDL_Delay(MOVE_DELAY_MS);
                 }
             }
             else {
@@ -54,6 +53,7 @@ void Game::run() {
                 up = down = right = false;
                 spriteleft();
             }
+            SDL_Delay(MOVE_DELAY_MS);
         }
         if (currentKeyStates[SDL_SCANCODE_RIGHT] && !isCharacterInBoundingBox(characterRect.x + 16, characterRect.y)) {
             if (right) {
@@ -69,7 +69,6 @@ void Game::run() {
                             bb.x -= 32;
                         }
                     }
-                    SDL_Delay(MOVE_DELAY_MS);
                 }
             }
             else {
@@ -77,6 +76,7 @@ void Game::run() {
                 up = down = left = false;
                 spriteright();
             }
+            SDL_Delay(MOVE_DELAY_MS);
         }
         if (currentKeyStates[SDL_SCANCODE_UP] && !isCharacterInBoundingBox(characterRect.x, characterRect.y - 32)) {
             if (up) {
@@ -92,7 +92,6 @@ void Game::run() {
                             bb.y += 32;
                         }
                     }
-                    SDL_Delay(MOVE_DELAY_MS);
                 }
             }
             else {
@@ -100,6 +99,7 @@ void Game::run() {
                 left = down = right = false;
                 spriteup();
             }
+            SDL_Delay(MOVE_DELAY_MS);
         }
         if (currentKeyStates[SDL_SCANCODE_DOWN] && !isCharacterInBoundingBox(characterRect.x, characterRect.y + 32)) {
             if (down) {
@@ -115,7 +115,6 @@ void Game::run() {
                             bb.y -= 32;
                         }
                     }
-                    SDL_Delay(MOVE_DELAY_MS);
                 }
             }
             else {
@@ -123,6 +122,7 @@ void Game::run() {
                 up = left = right = false;
                 spritedown();
             }
+            SDL_Delay(MOVE_DELAY_MS);
         }
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Clear screen
