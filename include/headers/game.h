@@ -41,6 +41,7 @@ class Game {
         int counter;
         bool quit;
         bool inStartScreen;
+        bool isEndScreen;
 
         bool left = false;
         bool right = false;
@@ -58,6 +59,11 @@ class Game {
 
         void renderStartScreen();
         void handleStartScreenEvents();
+        void renderEndScreen();
+        void handleEndScreenEvents();
+        bool isVictory(int x, int y);
+
+        BoundingBox victoryBox = { STARTING_BACKGROUND_X + TREE_WIDTH*3 + GRASS_WIDTH, STARTING_BACKGROUND_Y + TREE_HEIGHT*5 - GRASS_HEIGHT, GRASS_WIDTH*3, GRASS_HEIGHT*2 };
         
     public:
         Game();

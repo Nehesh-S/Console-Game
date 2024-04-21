@@ -24,6 +24,7 @@ Game::~Game() {
 
 void Game::run() {
     inStartScreen = true;
+    isEndScreen = false;
     quit = false;
 
     while (inStartScreen) {
@@ -36,6 +37,13 @@ void Game::run() {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 quit = true;
+            }
+        }
+
+        if (inStartScreen) {
+            while (inStartScreen) {
+                handleStartScreenEvents();
+                renderStartScreen();
             }
         }
 
@@ -56,6 +64,7 @@ void Game::run() {
                         for (auto& gb : grass) {
                             gb.x += 32;
                         }
+                        victoryBox.x += 32;
                     }
                 }
             }
@@ -80,8 +89,9 @@ void Game::run() {
                             bb.x -= 32;
                         }
                         for (auto& gb : grass) {
-                            gb.x += 32;
+                            gb.x -= 32;
                         }
+                        victoryBox.x -= 32;
                     }
                 }
             }
@@ -106,8 +116,9 @@ void Game::run() {
                             bb.y += 32;
                         }
                         for (auto& gb : grass) {
-                            gb.x += 32;
+                            gb.y += 32;
                         }
+                        victoryBox.y += 32;
                     }
                 }
             }
@@ -132,8 +143,9 @@ void Game::run() {
                             bb.y -= 32;
                         }
                         for (auto& gb : grass) {
-                            gb.x += 32;
+                            gb.y -= 32;
                         }
+                        victoryBox.y -= 32;
                     }
                 }
             }
@@ -144,6 +156,15 @@ void Game::run() {
             }
             SDL_Delay(MOVE_DELAY_MS);
         }
+
+        if (isVictory(characterRect.x, characterRect.y)) 
+            isEndScreen = true;
+
+        while (isEndScreen) {
+            handleEndScreenEvents();
+            renderEndScreen();
+        }
+        
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Clear screen
         SDL_RenderClear(renderer);
@@ -251,10 +272,56 @@ void Game::handleStartScreenEvents() {
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             quit = true;
+            inStartScreen = false;
+            return;
         } else if (event.type == SDL_KEYDOWN) {
             if (event.key.keysym.sym == SDLK_RETURN) {
                 inStartScreen = false;
             }
         }
     }
+}
+
+void Game::renderEndScreen() {
+    // Render the start screen
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Set background color to white
+    SDL_RenderClear(renderer);
+    
+    // Load the image
+    SDL_Surface* endScreenImageSurface = IMG_Load("res/end/victory.png");
+    if (!endScreenImageSurface) {
+        std::cerr << "Failed to load start screen image: " << IMG_GetError() << std::endl;
+        return;
+    }
+    SDL_Texture* endScreenImageTexture = SDL_CreateTextureFromSurface(renderer, endScreenImageSurface);
+    SDL_FreeSurface(endScreenImageSurface);
+
+    // Render the image
+    SDL_Rect imageRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT }; // Adjust the rect as needed
+    SDL_RenderCopy(renderer, endScreenImageTexture, NULL, &imageRect);
+
+    // Present renderer
+    SDL_RenderPresent(renderer);
+
+    // Destroy texture
+    SDL_DestroyTexture(endScreenImageTexture);
+}
+
+void Game::handleEndScreenEvents() {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            quit = true;
+            isEndScreen = false;
+            return;
+        }
+    }
+}
+
+bool Game::isVictory(int x, int y) {
+    // Check if the character is within any of the bounding boxes
+    if (x < victoryBox.x + victoryBox.w && x > victoryBox.x && y < victoryBox.y + victoryBox.h && y > victoryBox.y) {
+        return true; // Character is in bounding box
+    }
+    return false; // Character is not in any bounding box
 }
