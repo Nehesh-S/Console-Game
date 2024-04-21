@@ -11,6 +11,7 @@ Game::Game() {
     characterRect = { CHARACTER_START_X, CHARACTER_START_Y, CHARACTER_WIDTH, CHARACTER_HEIGHT };
 
     addBoundingBoxes();
+    addGrass();
 }
 
 Game::~Game() {
@@ -45,6 +46,9 @@ void Game::run() {
                         for (auto& bb : boundingBoxes) {
                             bb.x += 32;
                         }
+                        for (auto& gb : grass) {
+                            gb.x += 32;
+                        }
                     }
                 }
             }
@@ -67,6 +71,9 @@ void Game::run() {
                         }
                         for (auto& bb : boundingBoxes) {
                             bb.x -= 32;
+                        }
+                        for (auto& gb : grass) {
+                            gb.x += 32;
                         }
                     }
                 }
@@ -91,6 +98,9 @@ void Game::run() {
                         for (auto& bb : boundingBoxes) {
                             bb.y += 32;
                         }
+                        for (auto& gb : grass) {
+                            gb.x += 32;
+                        }
                     }
                 }
             }
@@ -113,6 +123,9 @@ void Game::run() {
                         }
                         for (auto& bb : boundingBoxes) {
                             bb.y -= 32;
+                        }
+                        for (auto& gb : grass) {
+                            gb.x += 32;
                         }
                     }
                 }

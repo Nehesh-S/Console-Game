@@ -37,6 +37,8 @@ class Game {
         int backgroundWidth;
         int backgroundHeight;
         std::vector<BoundingBox> boundingBoxes;
+        std::vector<BoundingBox> grass;
+        int counter;
 
         bool left = false;
         bool right = false;
@@ -45,6 +47,7 @@ class Game {
 
         void loadTextures();
         void addBoundingBoxes();
+        void addGrass();
         bool isCharacterInBoundingBox(int x, int y);
         void spriteup();
         void spritedown();
