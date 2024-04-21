@@ -23,7 +23,14 @@ Game::~Game() {
 }
 
 void Game::run() {
-    bool quit = false;
+    inStartScreen = true;
+    quit = false;
+
+    while (inStartScreen) {
+        handleStartScreenEvents();
+        renderStartScreen();
+    }
+
     while (!quit) {
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -212,4 +219,42 @@ bool Game::isCharacterInBoundingBox(int x, int y) {
         }
     }
     return false; // Character is not in any bounding box
+}
+
+void Game::renderStartScreen() {
+    // Render the start screen
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Set background color to white
+    SDL_RenderClear(renderer);
+    
+    // Load the image
+    SDL_Surface* startScreenImageSurface = IMG_Load("res/start/start.png");
+    if (!startScreenImageSurface) {
+        std::cerr << "Failed to load start screen image: " << IMG_GetError() << std::endl;
+        return;
+    }
+    SDL_Texture* startScreenImageTexture = SDL_CreateTextureFromSurface(renderer, startScreenImageSurface);
+    SDL_FreeSurface(startScreenImageSurface);
+
+    // Render the image
+    SDL_Rect imageRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT }; // Adjust the rect as needed
+    SDL_RenderCopy(renderer, startScreenImageTexture, NULL, &imageRect);
+
+    // Present renderer
+    SDL_RenderPresent(renderer);
+
+    // Destroy texture
+    SDL_DestroyTexture(startScreenImageTexture);
+}
+
+void Game::handleStartScreenEvents() {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
+            quit = true;
+        } else if (event.type == SDL_KEYDOWN) {
+            if (event.key.keysym.sym == SDLK_RETURN) {
+                inStartScreen = false;
+            }
+        }
+    }
 }

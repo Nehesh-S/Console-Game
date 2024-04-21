@@ -39,6 +39,8 @@ class Game {
         std::vector<BoundingBox> boundingBoxes;
         std::vector<BoundingBox> grass;
         int counter;
+        bool quit;
+        bool inStartScreen;
 
         bool left = false;
         bool right = false;
@@ -53,6 +55,9 @@ class Game {
         void spritedown();
         void spriteleft();
         void spriteright();
+
+        void renderStartScreen();
+        void handleStartScreenEvents();
         
     public:
         Game();
