@@ -165,7 +165,7 @@ void Game::run() {
             renderEndScreen();
         }
         
-
+        updateTimer();
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Clear screen
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, backgroundTexture, NULL, &backgroundRect); // Render background
@@ -324,4 +324,57 @@ bool Game::isVictory(int x, int y) {
         return true; // Character is in bounding box
     }
     return false; // Character is not in any bounding box
+}
+
+void Game::updateTimer() {
+    Uint32 currentTime = SDL_GetTicks();
+    if (currentTime - gTimerStartTime >= 1000 && gTimerValue > 0) {
+        gTimerValue--;
+        gTimerStartTime = currentTime;
+    }
+    // std::cout << gTimerValue << std::endl;
+}
+
+void Game::renderTimer() {
+    // Get the width and height of each character image
+    int characterWidth = 12; // Adjust according to the size of your images
+    int characterHeight = 20; // Adjust according to the size of your images
+
+    // Set the initial position for rendering
+    int x = WINDOW_WIDTH - TIMER_WIDTH + 10;
+    int y = 10;
+
+    // Iterate through each digit of the timer value
+    std::string timerText = std::to_string(gTimerValue);
+    for (char digit : timerText) {
+        // Construct the filename for the digit image
+        std::string filename = digit + ".png";
+        filename = "res/numbers/" + filename;
+
+        // Load the digit image using SDL_image
+        SDL_Surface* digitSurface = IMG_Load(filename.c_str());
+        if (digitSurface == nullptr) {
+            std::cerr << "Failed to load digit surface! SDL_image Error: " << IMG_GetError() << std::endl;
+            return;
+        }
+
+        // Create a texture from the surface
+        SDL_Texture* digitTexture = SDL_CreateTextureFromSurface(renderer, digitSurface);
+        if (digitTexture == nullptr) {
+            std::cerr << "Failed to create digit texture! SDL Error: " << SDL_GetError() << std::endl;
+            SDL_FreeSurface(digitSurface);
+            return;
+        }
+
+        // Render the texture
+        SDL_Rect digitRect = { x, y, characterWidth, characterHeight };
+        SDL_RenderCopy(renderer, digitTexture, nullptr, &digitRect);
+
+        // Free resources
+        SDL_DestroyTexture(digitTexture);
+        SDL_FreeSurface(digitSurface);
+
+        // Move to the next position for the next digit
+        x += characterWidth;
+    }
 }

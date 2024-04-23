@@ -21,6 +21,9 @@ const int GRASS_WIDTH = 32;
 const int GRASS_HEIGHT = 32;
 const int MAP_WIDTH = 2112;
 const int MAP_HEIGHT = 2208;
+const int TIMER_WIDTH = 100;
+const int TIMER_HEIGHT = 50;
+const int TIMER_START = 60;
 
 struct BoundingBox {
     int x, y, w, h;
@@ -64,7 +67,13 @@ class Game {
         bool isVictory(int x, int y);
 
         BoundingBox victoryBox = { STARTING_BACKGROUND_X + TREE_WIDTH*3 + GRASS_WIDTH, STARTING_BACKGROUND_Y + TREE_HEIGHT*5 - GRASS_HEIGHT, GRASS_WIDTH*3, GRASS_HEIGHT*2 };
-        
+
+        void updateTimer();
+        void renderTimer();
+        SDL_Texture* gTimerTexture = nullptr;
+        int gTimerValue = TIMER_START;
+        Uint32 gTimerStartTime = 0;
+
     public:
         Game();
         ~Game();
