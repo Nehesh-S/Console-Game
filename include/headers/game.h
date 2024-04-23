@@ -21,8 +21,8 @@ const int GRASS_WIDTH = 32;
 const int GRASS_HEIGHT = 32;
 const int MAP_WIDTH = 2112;
 const int MAP_HEIGHT = 2208;
-const int TIMER_WIDTH = 100;
-const int TIMER_HEIGHT = 50;
+const int TIMER_WIDTH = 25;
+const int TIMER_HEIGHT = 20;
 const int TIMER_START = 46;
 
 struct BoundingBox {

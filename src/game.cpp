@@ -7,7 +7,7 @@ Game::Game() {
     loadTextures();
     spriteup();
     up = true;
-    backgroundRect = { STARTING_BACKGROUND_X, STARTING_BACKGROUND_Y, backgroundWidth, backgroundHeight }; // Set the background size to the loaded image size
+    backgroundRect = { STARTING_BACKGROUND_X, STARTING_BACKGROUND_Y, backgroundWidth, backgroundHeight };
     characterRect = { CHARACTER_START_X, CHARACTER_START_Y, CHARACTER_WIDTH, CHARACTER_HEIGHT };
 
     addBoundingBoxes();
@@ -60,11 +60,11 @@ void Game::run() {
             if (left) {
                 if (characterRect.x > 0 || backgroundRect.x < 0) {
                     if (characterRect.x > SCROLL_LIMIT_X || backgroundRect.x >= 0) {
-                        characterRect.x -= 32; // Move character left
+                        characterRect.x -= 32;
                     }
                     else {
                         if (backgroundRect.x < 0) {
-                            backgroundRect.x += 32; // Move background right to simulate larger map
+                            backgroundRect.x += 32;
                         }
                         for (auto& bb : boundingBoxes) {
                             bb.x += 32;
@@ -87,11 +87,11 @@ void Game::run() {
             if (right) {
                 if (characterRect.x < WINDOW_WIDTH - CHARACTER_WIDTH || backgroundRect.x + backgroundRect.w > WINDOW_WIDTH) {
                     if (characterRect.x < WINDOW_WIDTH - CHARACTER_WIDTH - SCROLL_LIMIT_X || backgroundRect.x + backgroundRect.w <= WINDOW_WIDTH) {
-                        characterRect.x += 32; // Move character right
+                        characterRect.x += 32;
                     }
                     else {
                         if (backgroundRect.x + backgroundRect.w > WINDOW_WIDTH) {
-                            backgroundRect.x -= 32; // Move background left to simulate larger map
+                            backgroundRect.x -= 32;
                         }
                         for (auto& bb : boundingBoxes) {
                             bb.x -= 32;
@@ -114,11 +114,11 @@ void Game::run() {
             if (up) {
                 if (characterRect.y > 0 || backgroundRect.y < 0) {
                     if (characterRect.y > SCROLL_LIMIT_Y || backgroundRect.y >= 0) {
-                        characterRect.y -= 32; // Move character up
+                        characterRect.y -= 32;
                     }
                     else {
                         if (backgroundRect.y < 0) {
-                            backgroundRect.y += 32; // Move background down to simulate larger map
+                            backgroundRect.y += 32;
                         }
                         for (auto& bb : boundingBoxes) {
                             bb.y += 32;
@@ -141,11 +141,11 @@ void Game::run() {
             if (down) {
                 if (characterRect.y < WINDOW_HEIGHT - CHARACTER_HEIGHT || backgroundRect.y + backgroundRect.h > WINDOW_HEIGHT) {
                     if (characterRect.y < WINDOW_HEIGHT - CHARACTER_HEIGHT - SCROLL_LIMIT_Y || backgroundRect.y + backgroundRect.h <= WINDOW_HEIGHT) {
-                        characterRect.y += 32; // Move character down
+                        characterRect.y += 32;
                     }
                     else {
                         if (backgroundRect.y + backgroundRect.h > WINDOW_HEIGHT) {
-                            backgroundRect.y -= 32; // Move background up to simulate larger map
+                            backgroundRect.y -= 32;
                         }
                         for (auto& bb : boundingBoxes) {
                             bb.y -= 32;
@@ -178,7 +178,7 @@ void Game::run() {
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, backgroundTexture, NULL, &backgroundRect); // Render background
         SDL_RenderCopy(renderer, characterTexture, NULL, &characterRect); // Render character
-        SDL_RenderPresent(renderer); // Present renderer
+        SDL_RenderPresent(renderer);
         renderTimer();
     }
 }
@@ -198,7 +198,7 @@ void Game::loadTextures() {
 }
 
 void Game::spriteup() {
-    // Load character sprite image
+    // Load character image
     SDL_Surface* characterSurface = IMG_Load("res/player/normal_up.png");
     if (!characterSurface) {
         std::cerr << "Failed to load character sprite image: " << SDL_GetError() << std::endl;
@@ -209,7 +209,6 @@ void Game::spriteup() {
 }
 
 void Game::spritedown() {
-    // Load character sprite image
     SDL_Surface* characterSurface = IMG_Load("res/player/normal_down.png");
     if (!characterSurface) {
         std::cerr << "Failed to load character sprite image: " << SDL_GetError() << std::endl;
@@ -220,7 +219,6 @@ void Game::spritedown() {
 }
 
 void Game::spriteleft() {
-    // Load character sprite image
     SDL_Surface* characterSurface = IMG_Load("res/player/normal_left.png");
     if (!characterSurface) {
         std::cerr << "Failed to load character sprite image: " << SDL_GetError() << std::endl;
@@ -231,7 +229,6 @@ void Game::spriteleft() {
 }
 
 void Game::spriteright() {
-    // Load character sprite image
     SDL_Surface* characterSurface = IMG_Load("res/player/normal_right.png");
     if (!characterSurface) {
         std::cerr << "Failed to load character sprite image: " << SDL_GetError() << std::endl;
@@ -242,7 +239,6 @@ void Game::spriteright() {
 }
 
 bool Game::isCharacterInBoundingBox(int x, int y) {
-    // Check if the character is within any of the bounding boxes
     for (const auto& bb : boundingBoxes) {
         if (x < bb.x + bb.w && x + CHARACTER_WIDTH > bb.x && y < bb.y + bb.h && y + CHARACTER_HEIGHT > bb.y) {
             return true; // Character is in bounding box
@@ -253,10 +249,9 @@ bool Game::isCharacterInBoundingBox(int x, int y) {
 
 void Game::renderStartScreen() {
     // Render the start screen
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Set background color to white
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
     
-    // Load the image
     SDL_Surface* startScreenImageSurface = IMG_Load("res/start/start.png");
     if (!startScreenImageSurface) {
         std::cerr << "Failed to load start screen image: " << IMG_GetError() << std::endl;
@@ -265,14 +260,11 @@ void Game::renderStartScreen() {
     SDL_Texture* startScreenImageTexture = SDL_CreateTextureFromSurface(renderer, startScreenImageSurface);
     SDL_FreeSurface(startScreenImageSurface);
 
-    // Render the image
-    SDL_Rect imageRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT }; // Adjust the rect as needed
+    SDL_Rect imageRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
     SDL_RenderCopy(renderer, startScreenImageTexture, NULL, &imageRect);
 
-    // Present renderer
     SDL_RenderPresent(renderer);
 
-    // Destroy texture
     SDL_DestroyTexture(startScreenImageTexture);
 }
 
@@ -292,36 +284,31 @@ void Game::handleStartScreenEvents() {
 }
 
 void Game::renderEndScreen() {
-    // Render the start screen
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Set background color to white
+    // Render the end screen
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
     
-    // Load the image
     SDL_Surface* endScreenImageSurface = IMG_Load("res/end/victory.png");
     if (!endScreenImageSurface) {
-        std::cerr << "Failed to load start screen image: " << IMG_GetError() << std::endl;
+        std::cerr << "Failed to load end screen image: " << IMG_GetError() << std::endl;
         return;
     }
     SDL_Texture* endScreenImageTexture = SDL_CreateTextureFromSurface(renderer, endScreenImageSurface);
     SDL_FreeSurface(endScreenImageSurface);
 
-    // Render the image
-    SDL_Rect imageRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT }; // Adjust the rect as needed
+    SDL_Rect imageRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
     SDL_RenderCopy(renderer, endScreenImageTexture, NULL, &imageRect);
 
-    // Present renderer
     SDL_RenderPresent(renderer);
 
-    // Destroy texture
     SDL_DestroyTexture(endScreenImageTexture);
 }
 
 void Game::renderDefeatScreen() {
-    // Render the start screen
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Set background color to white
+    // Render the loose screen
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
     
-    // Load the image
     SDL_Surface* endScreenImageSurface = IMG_Load("res/end/defeat.jpg");
     if (!endScreenImageSurface) {
         std::cerr << "Failed to load start screen image: " << IMG_GetError() << std::endl;
@@ -330,14 +317,11 @@ void Game::renderDefeatScreen() {
     SDL_Texture* endScreenImageTexture = SDL_CreateTextureFromSurface(renderer, endScreenImageSurface);
     SDL_FreeSurface(endScreenImageSurface);
 
-    // Render the image
-    SDL_Rect imageRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT }; // Adjust the rect as needed
+    SDL_Rect imageRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
     SDL_RenderCopy(renderer, endScreenImageTexture, NULL, &imageRect);
 
-    // Present renderer
     SDL_RenderPresent(renderer);
 
-    // Destroy texture
     SDL_DestroyTexture(endScreenImageTexture);
 }
 
@@ -354,11 +338,10 @@ void Game::handleEndScreenEvents() {
 }
 
 bool Game::isVictory(int x, int y) {
-    // Check if the character is within any of the bounding boxes
     if (x < victoryBox.x + victoryBox.w && x > victoryBox.x && y < victoryBox.y + victoryBox.h && y > victoryBox.y) {
-        return true; // Character is in bounding box
+        return true;
     }
-    return false; // Character is not in any bounding box
+    return false;
 }
 
 void Game::updateTimer() {
@@ -374,31 +357,26 @@ void Game::updateTimer() {
 }
 
 void Game::renderTimer() {
-    // Get the width and height of each character image
-    int characterWidth = 12; // Adjust according to the size of your images
-    int characterHeight = 20; // Adjust according to the size of your images
+    int characterWidth = 12;
+    int characterHeight = 20;
 
-    // Set the initial position for rendering
+    // Set the initial position
     int x = WINDOW_WIDTH - TIMER_WIDTH - 10;
     int y = 10;
 
-    // Iterate through each digit of the timer value
     std::string timerText = std::to_string(gTimerValue);
     for (char digit : timerText) {
 
         std::string digitStr(1, digit);
-        // Construct the filename for the digit image
         std::string filename = "res/numbers/" + digitStr + ".png";
         // std::cout << filename << "\n";
 
-        // Load the digit image using SDL_image
         SDL_Surface* digitSurface = IMG_Load(filename.c_str());
         if (digitSurface == nullptr) {
             std::cerr << "Failed to load digit surface! SDL_image Error: " << IMG_GetError() << std::endl;
             return;
         }
 
-        // Create a texture from the surface
         SDL_Texture* digitTexture = SDL_CreateTextureFromSurface(renderer, digitSurface);
         if (digitTexture == nullptr) {
             std::cerr << "Failed to create digit texture! SDL Error: " << SDL_GetError() << std::endl;
@@ -406,16 +384,13 @@ void Game::renderTimer() {
             return;
         }
 
-        // Render the texture
         SDL_Rect digitRect = { x, y, characterWidth, characterHeight };
         SDL_RenderCopy(renderer, digitTexture, NULL, &digitRect);
         SDL_RenderPresent(renderer);
 
-        // Free resources
         SDL_DestroyTexture(digitTexture);
         SDL_FreeSurface(digitSurface);
 
-        // Move to the next position for the next digit
         x += characterWidth;
     }
 }
