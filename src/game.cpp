@@ -25,6 +25,7 @@ Game::~Game() {
 void Game::run() {
     inStartScreen = true;
     isEndScreen = false;
+    isLose = false;
     quit = false;
 
     while (inStartScreen) {
@@ -44,6 +45,13 @@ void Game::run() {
             while (inStartScreen) {
                 handleStartScreenEvents();
                 renderStartScreen();
+            }
+        }
+
+        if (isLose) {
+            while (isLose) {
+                handleEndScreenEvents();
+                renderDefeatScreen();
             }
         }
 
@@ -308,12 +316,38 @@ void Game::renderEndScreen() {
     SDL_DestroyTexture(endScreenImageTexture);
 }
 
+void Game::renderDefeatScreen() {
+    // Render the start screen
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Set background color to white
+    SDL_RenderClear(renderer);
+    
+    // Load the image
+    SDL_Surface* endScreenImageSurface = IMG_Load("res/end/defeat.jpg");
+    if (!endScreenImageSurface) {
+        std::cerr << "Failed to load start screen image: " << IMG_GetError() << std::endl;
+        return;
+    }
+    SDL_Texture* endScreenImageTexture = SDL_CreateTextureFromSurface(renderer, endScreenImageSurface);
+    SDL_FreeSurface(endScreenImageSurface);
+
+    // Render the image
+    SDL_Rect imageRect = { 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT }; // Adjust the rect as needed
+    SDL_RenderCopy(renderer, endScreenImageTexture, NULL, &imageRect);
+
+    // Present renderer
+    SDL_RenderPresent(renderer);
+
+    // Destroy texture
+    SDL_DestroyTexture(endScreenImageTexture);
+}
+
 void Game::handleEndScreenEvents() {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT) {
             quit = true;
             isEndScreen = false;
+            isLose = false;
             return;
         }
     }
@@ -332,6 +366,9 @@ void Game::updateTimer() {
     if (currentTime - gTimerStartTime >= 1000 && gTimerValue > 0) {
         gTimerValue--;
         gTimerStartTime = currentTime;
+    }
+    if (gTimerValue == 0) {
+        isLose = true;
     }
     // std::cout << gTimerValue << std::endl;
 }

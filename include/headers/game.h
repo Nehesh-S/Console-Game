@@ -23,7 +23,7 @@ const int MAP_WIDTH = 2112;
 const int MAP_HEIGHT = 2208;
 const int TIMER_WIDTH = 100;
 const int TIMER_HEIGHT = 50;
-const int TIMER_START = 60;
+const int TIMER_START = 46;
 
 struct BoundingBox {
     int x, y, w, h;
@@ -45,6 +45,7 @@ class Game {
         bool quit;
         bool inStartScreen;
         bool isEndScreen;
+        bool isLose;
 
         bool left = false;
         bool right = false;
@@ -65,6 +66,7 @@ class Game {
         void renderEndScreen();
         void handleEndScreenEvents();
         bool isVictory(int x, int y);
+        void renderDefeatScreen();
 
         BoundingBox victoryBox = { STARTING_BACKGROUND_X + TREE_WIDTH*3 + GRASS_WIDTH, STARTING_BACKGROUND_Y + TREE_HEIGHT*5 - GRASS_HEIGHT, GRASS_WIDTH*3, GRASS_HEIGHT*2 };
 
