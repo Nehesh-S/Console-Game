@@ -171,6 +171,7 @@ void Game::run() {
         SDL_RenderCopy(renderer, backgroundTexture, NULL, &backgroundRect); // Render background
         SDL_RenderCopy(renderer, characterTexture, NULL, &characterRect); // Render character
         SDL_RenderPresent(renderer); // Present renderer
+        renderTimer();
     }
 }
 
@@ -341,15 +342,17 @@ void Game::renderTimer() {
     int characterHeight = 20; // Adjust according to the size of your images
 
     // Set the initial position for rendering
-    int x = WINDOW_WIDTH - TIMER_WIDTH + 10;
+    int x = WINDOW_WIDTH - TIMER_WIDTH - 10;
     int y = 10;
 
     // Iterate through each digit of the timer value
     std::string timerText = std::to_string(gTimerValue);
     for (char digit : timerText) {
+
+        std::string digitStr(1, digit);
         // Construct the filename for the digit image
-        std::string filename = digit + ".png";
-        filename = "res/numbers/" + filename;
+        std::string filename = "res/numbers/" + digitStr + ".png";
+        // std::cout << filename << "\n";
 
         // Load the digit image using SDL_image
         SDL_Surface* digitSurface = IMG_Load(filename.c_str());
@@ -368,7 +371,8 @@ void Game::renderTimer() {
 
         // Render the texture
         SDL_Rect digitRect = { x, y, characterWidth, characterHeight };
-        SDL_RenderCopy(renderer, digitTexture, nullptr, &digitRect);
+        SDL_RenderCopy(renderer, digitTexture, NULL, &digitRect);
+        SDL_RenderPresent(renderer);
 
         // Free resources
         SDL_DestroyTexture(digitTexture);
